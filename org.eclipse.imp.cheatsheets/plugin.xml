@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>	
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         id="org.eclipse.imp.cheatSheets"
+         name="IMP Cheat Sheets"
+         point="org.eclipse.ui.cheatsheets.cheatSheetContent">
+      <category
+         name="IMP"
+         id="org.eclipse.imp">
+      </category>
+      <cheatsheet
+         name="A) An Overview"
+         category="org.eclipse.imp"
+         id="org.eclipse.imp.cheatSheets.overview"
+         contentFile="cheatsheets/AnOverview.xml">
+         <description>
+           An overivew of the process of creating a new IMP IDE for a particular programming language.
+         </description>
+      </cheatsheet>
+      <cheatsheet
+         name="Z) New IMP IDE"
+         category="org.eclipse.imp"
+         id="org.eclipse.imp.cheatSheets.language"
+         contentFile="cheatsheets/NewProgLang.xml">
+         <description>
+           Creating a new IDE for a programming language.  This cheat sheet provides an overview of the process, including several steps, but it is now somewhat outdated.
+         </description>
+      </cheatsheet>
+      <cheatsheet
+         name="B) New Programming Language"
+         category="org.eclipse.imp"
+         id="org.eclipse.imp.cheatSheets.languageDescriptor"
+         contentFile="cheatsheets/NewProgrammingLanguage.xml">
+         <description>
+           Creating a programming language descriptor for a new IMP IDE 
+         </description>
+      </cheatsheet>
+      <cheatsheet
+         name="C) New Grammar, Lexer, and Parser"
+         category="org.eclipse.imp"
+         id="org.eclipse.imp.cheatSheets.grammarLexerParser"
+         contentFile="cheatsheets/NewGrammarAndParser.xml">
+         <description>
+           Creating a grammar, lexer, and parser for the language of a new IMP IDE 
+         </description>
+      </cheatsheet>
+      <cheatsheet
+         name="D) New Token Colorer"
+         category="org.eclipse.imp"
+         id="org.eclipse.imp.cheatSheets.tokenColorer"
+         contentFile="cheatsheets/NewTokenColorer.xml">
+         <description>
+           Creating a token-coloring service, to color (and otherwise attribute) the text associated with different token types when it appears in the IDE editor
+         </description>
+      </cheatsheet>
+      <cheatsheet
+         name="E) New Outliner"
+         category="org.eclipse.imp"
+         id="org.eclipse.imp.cheatSheets.outliner"
+         contentFile="cheatsheets/NewOutliner.xml">
+         <description>
+           Creating an outlining service that will provide an outline view of the source text in the IDE editor
+         </description>
+      </cheatsheet>
+      <cheatsheet
+         name="F) New Folding Updater"
+         category="org.eclipse.imp"
+         id="org.eclipse.imp.cheatSheets.foldingUpdater"
+         contentFile="cheatsheets/NewFoldingUpdater.xml">
+         <description>
+           Creating an text-folding service that will support folding of source text in the IDE editor
+         </description>
+      </cheatsheet>
+      <cheatsheet
+         name="G) New Reference Resolver and Hyperlinker"
+         category="org.eclipse.imp"
+         id="org.eclipse.imp.cheatSheets.referenceResolverAndHyperlinker"
+         contentFile="cheatsheets/NewReferenceResolverAndHyperlinker.xml">
+         <description>
+           Creating a reference-resolution service that will automatically enable hyperlinking within source text in an IDE editor
+         </description>
+      </cheatsheet>
+      <cheatsheet
+         name="H) New Content Proposer"
+         category="org.eclipse.imp"
+         id="org.eclipse.imp.cheatSheets.contentProposer"
+         contentFile="cheatsheets/NewContentProposer.xml">
+         <description>
+           Creating a content proposal (content assist) service for source text in an IDE editor
+         </description>
+      </cheatsheet>
+      <cheatsheet
+         name="I) New Builder and Nature Enabler"
+         category="org.eclipse.imp"
+         id="org.eclipse.imp.cheatSheets.builderAndNatureEnabler"
+         contentFile="cheatsheets/NewBuilderAndNatureEnabler.xml">
+         <description>
+           Creating a bulder for source files in the language of your IDE and adding a utility to facilitate the association of the language nature to development projects
+         </description>
+      </cheatsheet>
+   </extension>
+</plugin>

@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet title="Creating a New IMP Programming Language using LPG">
+<intro>
+<description>
+This cheat sheet describes the basic process for creating a new IMP-based
+IDE for a specific programming language.
+It is assumed here that the language parser is generated using LPG (although this
+is not a requirement for IMP in general, and many of the comments given here
+will apply to languages with parsers based on other technologies).
+<br/><br/>
+
+IMP uses extensions to Eclipse to provide language-specific IDE capabilities
+such as text editing, token coloring, outlining, source folding, hyperlink detection,
+and project building.
+These extensions are implemented by IMP-provided or -generated classes that
+reqiure some customization by the user, usually relatively minor.
+The goal is to enable IMP users to focus on the language-dependent aspects
+of IDE capabilities that are of specific interest to them and to allow users
+to ignore, insofar as possible, the generic infrastructure hacking that
+is necessary to realize these capabilities in Eclipse.
+<br/><br/>
+
+<b>Notes:</b>
+<br/><br/>
+
+This cheat sheet describes a straight-line process that covers the creation
+of several language services.  Although the language description and parser
+are necessary for the implementation and execution of later services, the later
+services may actually be addressed in any order and may be skipped if not of
+interest.
+<br/><br/>
+
+The new IDE must be created in an existing plugin project.
+Thus, you may want to create a new, language-specific plugin
+project before continuing through this cheat sheet.
+Each IMP IDE has to be defined in a distinct project.
+<br/><br/>
+
+A note about plugin classes:  When you use the Eclipse New Project wizard to create a
+new plugin project, the wizard creates a package with the name of the project.
+In that package the wizard creates a plugin class with a name of the form "&lt;ProjectName&gt;Plugin.java."
+The Safari New Programming Language wizard likewise creates a new package and plugin class,
+but named based on the programming language rather than on the project.
+If you use the default values in each wizard, you can end up with two plugin classes,
+each in a different package.
+There are two ways to avoid this.  One is just to give your project and language the same name.
+The other is, during plugin-project creation, to override the default values and give your plugin
+class and package a name that matches that of your language.
+<br/><br/>
+
+
+</description>
+</intro>
+
+<item title="Create a language description">
+<action pluginId="org.eclipse.imp.cheatsheets"
+        class="org.eclipse.imp.cheatsheets.actions.NewLanguageAction"/>
+<description>
+Invoke "File" -&gt; "New" -&gt; "IDE Language Support" -&gt; "Programming Language".
+<br/><br/>
+
+Enter (or browse to) the project in which you want to create your language.
+Fill out the "language" field with a unique name.
+Each language service implementation is associated with the language for which it is
+intended by means of this unique name.
+<br/><br/>
+
+Enter any user-readable text you like in the "description" field.
+<br/><br/>
+
+Enter a comma-separated list of file-name extensions in the "extensions" field
+(do not include dots).
+A file whose name has any of these extensions will be assumed to contain source code in the
+new programming language, and the language services defined for this language will
+become available to the developer while editing such files.
+<br/><br/>
+
+Hit "Finish" when done editing the various fields.
+<br/><br/>
+
+A IMP language description extension will be created using the above information.
+</description>
+</item>
+
+
+
+<item title="Create a grammar and lexer specification">
+<action pluginId="org.eclipse.imp.cheatsheets"
+        class="org.eclipse.imp.cheatsheets.actions.NewParserAction"/>
+<description>
+Invoke "File" -&gt; "New" -&gt; "IDE Language Support" -&gt; "Parser Services" -&gt;
+"LPG Grammar and Parser for IMP".
+<br/><br/>
+
+Be sure that the proper names are entered into the project and language fields.
+As these values are entered, reasonable default values will be entered into other fields.
+<br/><br/>
+
+If you wish, edit the "id" field to specify a non-default extension ID for the
+parsing service.
+<br/><br/>
+
+If you wish, edit the "name" field to specify a non-default name for the
+parsing service. This parameter is not presently used, but is intended to be
+the user-visible name for the parser.
+<br/><br/>
+
+If you wish, edit the "class" field to specify a non-default fully-qualified
+name for the parse controller. This class is used to give access to the token
+stream, AST, and so on, to the various higher-level language services.
+<br/><br/>
+
+Hit "Finish" when done editing.  The LPG grammar file for your language will be
+open in the editor, and the structure of the file should appear in the "Outline"
+view.  The grammar file will contain some generally useful elements and some example
+entries for a simple expression language.  You will need to edit this file
+as apprpriate for your language.  (To acquire LPG--otherwise known as lpg--see
+http://sourceforge.net/projects/lpg.)
+<br/><br/>
+
+Note:  The generated parser classes will depend on lpg to compile, so
+the lpg.jar file should be added to your language project's build path.
+</description>
+</item>
+
+
+<item title="Create a token colorer">
+<action pluginId="org.eclipse.imp.cheatsheets"
+        class="org.eclipse.imp.cheatsheets.actions.NewTokenColorerAction"/>
+<description>
+Invoke "File" -&gt; "New" -&gt; "IDE Language Support" -&gt; "Editor Services" -&gt;
+"Token Colorer".
+<br/><br/>
+
+As before, assure that the names of your project and language have been entered
+into the appropriate fields.
+If desired, edit the remaining fields. Hit "Finish" when done.
+<br/><br/>
+
+You should see that the editor opens up the token colorer implementation.
+The token colorer class has two important methods: the constructor, in which
+a set of TextAttribute's are created (which are later used to specify the
+text presentation for the various token kinds), and the getColoring() method,
+which returns the TextAttribute to be used for the given token.
+<br/><br/>
+
+As you can see, getColoring() calls IToken.getKind() to determine the token
+kind (represented by an integer), and uses that to compute the correct text
+attributes. The set of valid token kinds is defined by the lexical analyzer;
+they are typically located in the generated "Parsersym" interface (in the parser package),
+and generally start with a prefix like "TK_".
+</description>
+</item>
+
+<item title="Create an outliner">
+<action pluginId="org.eclipse.imp.cheatsheets"
+        class="org.eclipse.imp.cheatsheets.actions.NewOutlinerAction"/>
+<description>
+Invoke "File" -&gt; "New" -&gt; "IDE Language Support" -&gt; "Editor Services" -&gt;
+"Outliner".
+<br/><br/>
+
+As before, enter the names of your project and language into the corresponding fields
+and, if desired, edit the remaining fields. Hit "Finish" when done.
+<br/><br/>
+
+The outliner implementation should open in the editor.
+The Outliner class only has one important method: the createOutlinePresentation(),
+which typically retrieves the current AST from the IParseController and visits
+it to populate the outline tree with various TreeItems.
+Some example visit methods for the simple expression language are shown in the
+generated class.
+<br/><br/>
+
+To add a program entity to the outline, simply override the visit method corresponding
+to that type of AST node and have the overriding mehtod call createSubItem() with an appropriate label.
+(The AbstractVisitor class contains default visit methods for all node types in
+the AST.  This class may be located in a separate AST package or--depending on
+parser-generator options--contained as a member class within the generated parser.)
+</description>
+</item>
+
+
+<item title="Enable source-text folding">
+<action pluginId="org.eclipse.imp.cheatsheets"
+        class="org.eclipse.imp.cheatsheets.actions.NewFoldingUpdaterAction"/>
+<description>
+Invoke "File" -&gt; "New" -&gt; "IDE Language Support" -&gt; "Editor Services" -&gt;
+"Source folding updater".
+<br/><br/>
+
+As before, be sure that the name of your language project is correctly filled in.
+Additional fields will be filled in with default values on this basis.  If desired,
+edit any of these fields.  Hit "Finish" when done.
+<br/><br/>
+
+The FoldingUpdater implementation should open in the editor.  Folding is achieved
+by associating ProjectionAnnotations with regions of source text that are to be foldable.
+The default implementation given here uses a visitor to walk the AST for the source
+document; visit methods for various node types are presumed to create the annotations.
+No visit methods are automatically generated; you will need to define a visit
+method for each node type for which the source text is to be foldable.
+<br/><br/>
+
+The basic implementation of these visit methods is simple.  It is only necessary to call
+the provided method makeAnnotation(..) and then return true or false depending
+on whether children of the given node are to be visited.
+(An example in the generated class shows this for a presumed AST node type that
+represents blocks.)
+The method makeAnnotation(..) assumes that the given node type is one that has been
+generated by LPG.  If your AST node types have been created in some other way
+then it may be necessary for you to revise the implementation of makeAnnotation(..).
+<br/><br/>
+
+You will also need to devise your own implementations of visit(..) or makeAnnotation(..)
+if you want regions of foldable text that do not correspond exactly to the extent of an
+AST node.
+</description>
+</item>
+
+
+<item title="Enable hyperlink detection">
+<action pluginId="org.eclipse.imp.cheatsheets"
+        class="org.eclipse.imp.cheatsheets.actions.NewReferenceResolverAction"/>
+<description>
+Invoke "File" -&gt; "New" -&gt; "IDE Language Support" -&gt; "Editor Services" -&gt;
+"Hyperlink Detector".
+<br/><br/>
+
+As before, be sure that the name of your language project is correctly filled in.
+Additional fields will be filled in with default values on this basis.  If desired,
+edit any of these fields.  Hit "Finish" when done.
+<br/><br/>
+
+The main class that implements the language-specific behavior for hyperlink
+detection is the "reference resolver", and should come up in the editor.
+For any AST node representing a program entity reference, the reference resolver
+produces the AST node defining the entity to which it refers. In general, to
+handle cross-compilation unit references, the AST node representing an entity
+definition will have to identify both the owning compilation unit and the entity
+within that compilation unit. The design of such a data structure is quite language-
+specific, and is outside the scope of this tutorial.
+<br/><br/>
+
+Your language-specific reference resolver extends a language-indepedent abstract
+class that provides basic implementations for most of the functions needed by
+the hyperlink detector.  There are two main functions that need to be implemented
+by your language-specific reference resolver.  One is getLinkTarget(Object, IParseController),
+which finds the target node for a given source node.  The other is getLinkText(Object),
+which gets the text to be associated with a link from a given node.  If this information
+has already been computed, e.g., by a compiler for your language, then these methods may
+simply need to retrieve it.  If the information has not been previously computed,
+then these methods may have to perform some fairly complex calculations.
+<br/><br/>
+
+There are additional opportunities for customization of reference resolution related
+to predetermination or filtering of types that may serve as the sources for hyperlinks.
+Additional comments about these are found in the classes involved.
+</description>
+</item>
+
+
+<item title="Create a builder">
+<action pluginId="org.eclipse.imp.cheatsheets"
+        class="org.eclipse.imp.cheatsheets.actions.NewBuilderAction"/>
+<description>
+Invoke "File" -&gt; "New" -&gt; "IDE Language Support" -&gt; "Core Services" -&gt;
+"Incremental Builder".
+<br/><br/>
+
+As before, assure that the names of your project and language are entered in
+the proper fields and, if desired, edit the remaining fields. Hit "Finish" when done.
+<br/><br/>
+
+Although it is not necessary to define a nature to which your builder will be
+associated, this is a fairly common practice.  If the values for "hasNature" and
+"isConfigurable" are left blank then they are treated as if false.
+<br/><br/>
+
+Although the parameter "name" and "value" fields are required here, they need to be
+given meaningful values only if your builder will make use of external information
+(which is not necessary for many builders).<br/><br/>
+
+The IncrementalProjectBuilder implementation should open up in the editor.
+<br/><br/>
+
+The skeleton builder overrides or implements several methods (defined in its abstract
+parent class SAFARIBuilderBase):<br/><br/>
+ - getErrorMarker()<br/>
+ - getInfoMarker()<br/>
+ - getWarningMarker()<br/>
+ - getPlugin()<br/>
+ - isSourceFile()<br/>
+ - isOutputFolder()<br/>
+ - compile()<br/><br/>
+
+Many of these will do reasonable things "out of the box". You will undoubtedly need to
+edit compile() to actually call out to your compiler in some fashion, retrieve the
+diagnostic messages and turn them into markers in the "Problems" view. If your
+compiler runs in an external process, or uses java.io to create output files, you'll
+also need to call IResource.refresh() on the folder that contains all the generated
+output files (assuming that it is somewhere in your workspace).
+<br/><br/>
+
+Note:  You may need to define an implementation of IMessageHandler, so that the builder
+can provide a message handler to the compiler, which the compiler can then use to call
+back to the builder to report error messages.
+</description>
+</item>
+
+
+<item title="To use your new language ...">
+<description>
+To use your new language and IMP IDE in a development project, you will need to
+add a corresponding builder entry to the project's ".project" file.
+If you have defined a nature for your language, you may also want to add a nature
+entry to the project's ".project" file.
+</description>
+</item>
+
+
+</cheatsheet>
