@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Box Formatting Plug-in (Incubation)
+Bundle-SymbolicName: org.eclipse.imp.box; singleton:=true
+Bundle-Version: 0.1.13
+Bundle-Activator: org.eclipse.imp.box.Activator
+Bundle-ActivationPolicy: lazy
+Eclipse-LazyStart: true
+Bundle-Vendor: jurgen.vinju@gmail.com
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.imp.runtime,
+ lpg.runtime,
+ org.eclipse.jface.text,
+ org.eclipse.jdt.core,
+ org.eclipse.imp.smapifier,
+ org.eclipse.compare,
+ sdf_eclipse_installer
+Export-Package: org.eclipse.imp.box.builders,
+ org.eclipse.imp.box.parser,
+ org.eclipse.imp.box.parser.Ast
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
