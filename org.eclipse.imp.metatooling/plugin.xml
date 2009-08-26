@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            primary="true"
+            file="doc/toc.xml"/>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <primaryWizard id="org.eclipse.imp.wizards.NewLanguageWizard"/>
+      <category
+            id="org.eclipse.imp.wizards"
+            name="IDE Language Support"/>
+      <wizard
+            class="org.eclipse.imp.wizards.NewLanguage"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards"
+            name="Programming language descriptor"
+            id="org.eclipse.imp.wizards.NewLanguage"/>
+            
+	<category
+	            id="org.eclipse.imp.wizards.build"
+	            name="Build Services"
+	            parentCategory="org.eclipse.imp.wizards"/>
+      <wizard
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.build"
+            class="org.eclipse.imp.wizards.NewBuilder"
+            icon="icons/sample.gif"
+            id="org.eclipse.imp.wizards.NewBuilder"
+            name="Incremental Builder"/>
+      <wizard
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.build"
+            class="org.eclipse.imp.wizards.NewCompiler"
+            icon="icons/sample.gif"
+            id="org.eclipse.imp.wizards.NewCompiler"
+            name="Poor Man's Compiler"/>
+	  <wizard
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.build"
+            class="org.eclipse.imp.wizards.NewNatureEnabler"
+            icon="icons/sample.gif"
+            id="org.eclipse.imp.wizards.NewNatureEnabler"
+            name="Nature Enabler"/>
+            
+      <category
+            id="org.eclipse.imp.wizards.core"
+            name="Core Services"
+            parentCategory="org.eclipse.imp.wizards"/>
+      <wizard
+            class="org.eclipse.imp.wizards.NewIndexer"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.core"
+            name="Indexer (unfinished)"
+            id="org.eclipse.imp.wizards.NewIndexer"/>	
+<!--            
+      <wizard
+            class="org.eclipse.imp.wizards.NewPreferencesDialog"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.core"
+            name="Preference Page"
+            id="org.eclipse.imp.wizards.NewPreferencesDialog"/>
+-->
+  <wizard
+            class="org.eclipse.imp.wizards.NewReferenceResolver"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.core"
+            name="Reference Resolver"
+            id="org.eclipse.imp.wizards.NewReferenceResolver"/>
+            
+ 	<category
+            id="org.eclipse.imp.wizards.create"
+            name="Creation Services"
+            parentCategory="org.eclipse.imp.wizards"/>
+	<wizard
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.create"
+            name="New Project Wizard (unfinished)"
+            icon="icons/sample.gif"
+            class="org.eclipse.imp.wizards.NewProject"
+            id="org.eclipse.imp.wizards.NewProjectWizard"/>
+ 
+      <category
+            id="org.eclipse.imp.wizards.editor"
+            name="Editor Services"
+            parentCategory="org.eclipse.imp.wizards"/>
+      <wizard
+            class="org.eclipse.imp.wizards.NewOutliner"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            name="Outliner (deprecated)"
+            id="org.eclipse.imp.wizards.NewOutliner"/>
+      <wizard
+            class="org.eclipse.imp.wizards.NewTreeModelBuilder"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            name="Tree Model Builder / Label Provider (supports outlining)"
+            id="org.eclipse.imp.wizards.NewTreeModelBuilder"/>
+      <wizard
+            class="org.eclipse.imp.wizards.NewEditorActionsContributor"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            name="Editor Actions Contributor"
+            id="org.eclipse.imp.wizards.NewEditorActionsContributor"/>
+      <wizard
+            class="org.eclipse.imp.wizards.NewHoverHelper"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            name="Hover helper"
+            id="org.eclipse.imp.wizards.NewHoverHelper"/>
+      <wizard
+            class="org.eclipse.imp.wizards.NewTokenColorer"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            name="Token colorer"
+            id="org.eclipse.imp.wizards.NewTokenColorer"/>
+      <wizard
+            class="org.eclipse.imp.wizards.NewContentProposer"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            name="Content proposer"
+            id="org.eclipse.imp.wizards.NewContentProposer"/>
+      <wizard
+            class="org.eclipse.imp.wizards.NewAnnotationHover"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            name="Annotation hover  (unfinished)"
+            id="org.eclipse.imp.wizards.NewAnnotationHover"/>
+	  <wizard
+            class="org.eclipse.imp.wizards.NewDocumentationProvider"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            name="Documentation provider"
+            id="org.eclipse.imp.wizards.NewDocumentationProvider"/>
+      <wizard
+            class="org.eclipse.imp.wizards.NewFoldingUpdater"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            name="Source folding updater"
+            id="org.eclipse.imp.wizards.NewFoldingUpdater"/>
+      <wizard
+            class="org.eclipse.imp.wizards.NewAutoEditStrategy"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            name="Auto-Edit Strategy "
+            id="org.eclipse.imp.wizards.NewAutoEditStrategy"/>
+
+      <wizard
+            class="org.eclipse.imp.wizards.NewFormattingSpecification"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards"
+            name="Box-based formatting specification"
+            id="org.eclipse.imp.wizards.NewFormattingSpecification"/>
+   
+      <wizard
+            class="org.eclipse.imp.wizards.NewFormatter"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            name="Source Formatter"
+            id="org.eclipse.imp.wizards.NewFormatter"/>
+
+      <wizard
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            class="org.eclipse.imp.wizards.NewFancyTokenColorer"
+            icon="icons/sample.gif"
+            id="org.eclipse.imp.wizards.NewFancyTokenColorer"
+            name="Fancy New Token Colorer  (unfinished)"/>
+	  <wizard
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            class="org.eclipse.imp.wizards.NewEditorService"
+            icon="icons/sample.gif"
+            id="org.eclipse.imp.wizards.NewEditorService"
+            name="Introduced editor service"/>
+      <wizard
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            class="org.eclipse.imp.wizards.NewOccurrenceMarker"
+            icon="icons/sample.gif"
+            id="org.eclipse.imp.wizards.NewOccurrenceMarker"
+            name="Occurrence marker"/>
+	  <wizard
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            class="org.eclipse.imp.wizards.NewEditorAnnotationCreator"
+            icon="icons/sample.gif"
+            id="org.eclipse.imp.newEditorAnnotationCreatorWizard"
+            name="Editor annotation creator"/>
+      <category
+            id="org.eclipse.imp.wizards.parser"
+            name="Parser Services"
+            parentCategory="org.eclipse.imp.wizards"/>
+      <!-- Never implemented
+      wizard
+            class="org.eclipse.imp.wizards.NewParser"
+            icon="icons/newgrammarfile.gif"
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.parser"
+            name="Hand-written Parser"
+            id="org.eclipse.imp.wizards.NewParser"/ -->
+<!--  <wizard
+            class="org.eclipse.imp.wizards.NewModelListener"
+            icon="icons/sample.gif"
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.parser"
+            name="Model Listener"
+            id="org.eclipse.imp.wizards.NewModelListener"/>
+ -->            
+            
+	<category
+            id="org.eclipse.imp.wizards.transform"
+            name="Transformation Services"
+            parentCategory="org.eclipse.imp.wizards"/>
+      <wizard
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.transform"
+            class="org.eclipse.imp.wizards.NewRefactoringWizard"
+            icon="icons/sample.gif"
+            id="org.eclipse.imp.wizards.NewRefactoring"
+            name="Refactoring"/> 
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="org.eclipse.imp.perspective.IMPPerspectiveFactory"
+            icon="icons/impPerspective.gif"
+            id="org.eclipse.imp.perspective"
+            name="IMP IDE Building"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.ui.resourcePerspective">
+         <perspectiveShortcut
+               id="org.eclipse.imp.perspective">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <perspectiveShortcut
+               id="org.eclipse.imp.perspective">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.debug.ui.DebugPerspective">
+         <perspectiveShortcut
+               id="org.eclipse.imp.perspective">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         id="sanityChecker"
+         name="IMP IDE Plug-in Sanity Checker"
+         point="org.eclipse.core.resources.builders">
+      <builder>
+         <run class="org.eclipse.imp.sanityChecker.SanityChecker">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="sanityNature"
+         point="org.eclipse.core.resources.natures">
+      <builder
+            id="org.eclipse.imp.metatooling.sanityChecker">
+      </builder>
+      <runtime>
+         <run
+               class="org.eclipse.imp.sanityChecker.SanityNature">
+         </run>
+      </runtime>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.jdt.core.IJavaProject"
+            adaptable="false"
+            nameFilter="*"
+            id="org.eclipse.imp.metatooling.projectContextMenu">
+         <menu
+               label="IMP"
+               path="additions"
+               id="org.eclipse.imp.metatooling.projectContextMenu">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               label="Enable &amp;Plugin Sanity Checker"
+               icon="icons/checkerEnable.gif"
+               menubarPath="org.eclipse.imp.metatooling.projectContextMenu/group1"
+               tooltip="Enable the plugin sanity checking builder for this project"
+               class="org.eclipse.imp.actions.EnableCheckerAction"
+               id="org.eclipse.imp.metatooling.enableCheckerAction">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         id="sanity.problem"
+         name="Plugin Sanity Checker Error"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+   </extension>
+</plugin>

@@ -1,0 +1,28 @@
+/*******************************************************************************
+* Copyright (c) 2007 IBM Corporation.
+* All rights reserved. This program and the accompanying materials
+* are made available under the terms of the Eclipse Public License v1.0
+* which accompanies this distribution, and is available at
+* http://www.eclipse.org/legal/epl-v10.html
+*
+* Contributors:
+*    Robert Fuhrer (rfuhrer@watson.ibm.com) - initial API and implementation
+
+*******************************************************************************/
+
+/*
+ * Created on Mar 22, 2006
+ */
+package org.eclipse.imp.wizards;
+
+import org.eclipse.swt.widgets.Composite;
+
+public class NewProjectWizardPage extends ExtensionPointWizardPage {
+    public NewProjectWizardPage(ExtensionPointWizard owner) {
+	super(owner, "org.eclipse.ui", "newWizards");
+    }
+
+    protected void createFirstControls(Composite parent) {
+	createLanguageFieldForPlatformSchema(parent);
+    }
+}
