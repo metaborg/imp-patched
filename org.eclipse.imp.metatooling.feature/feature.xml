@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.imp.metatooling"
+      label="%featureName"
+      version="0.1.94"
+      provider-name="%providerName"
+      plugin="org.eclipse.imp.metatooling"
+      image="eclipse_update_120.jpg">
+
+   <description url="http://www.eclipse.org/imp">
+      %description
+   </description>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <url>
+      <update label="%updateSiteName" url="http://download.eclipse.org/technology/imp/updates"/>
+      <discovery label="%updateSiteName" url="http://download.eclipse.org/technology/imp/updates"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.pde"/>
+      <import plugin="org.eclipse.pde.ui"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.ui.forms"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.views"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor"/>
+      <import feature="org.eclipse.jdt"/>
+      <import feature="org.eclipse.imp.runtime" version="0.1.99" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.team.core"/>
+      <import plugin="org.eclipse.update.configurator"/>
+      <import plugin="org.eclipse.core.expressions"/>
+      <import plugin="org.eclipse.ui.cheatsheets"/>
+      <import feature="lpg.runtime" version="2.0.16" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="org.eclipse.imp.cheatsheets"
+         download-size="36"
+         install-size="36"
+         version="0.1.82"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.imp.metatooling"
+         download-size="442"
+         install-size="442"
+         version="0.1.91"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.imp.preferences"
+         download-size="14"
+         install-size="14"
+         version="0.1.85"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.imp.prefspecs"
+         download-size="280"
+         install-size="280"
+         version="0.1.88"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.imp.presentation"
+         download-size="0"
+         install-size="0"
+         version="0.1.6"
+         unpack="false"/>
+
+</feature>
