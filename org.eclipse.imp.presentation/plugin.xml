@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.imp.runtime.languageDescription">
+      <language
+            extensions="psp"
+            description="IMP Presentation Specification"
+            language="psp">
+      </language>
+   </extension>
+   <extension
+         id="org.eclipse.imp.presentation.parser"
+         name="IMP Presentation Specification Parser"
+         point="org.eclipse.imp.runtime.parser">
+      <parser
+            class="org.eclipse.imp.presentation.parser.PSPParseController"
+            language="psp">
+      </parser>
+   </extension>
+   <extension
+         point="org.eclipse.imp.runtime.tokenColorer">
+      <tokenColorer
+            class="org.eclipse.imp.presentation.tokenColorer.PSPTokenColorer"
+            language="psp">
+      </tokenColorer>
+   </extension>
+   <extension
+         point="org.eclipse.imp.runtime.foldingUpdater">
+      <foldingUpdater
+            class="org.eclipse.imp.presentation.foldingUpdater.PSPFoldingUpdater"
+            language="psp">
+      </foldingUpdater>
+   </extension>
+   <extension
+         id="builder"
+         name="IMP Presentation Specification builder"
+         point="org.eclipse.core.resources.builders">
+      <builder>
+         <run
+               class="org.eclipse.imp.presentation.builders.PSPBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="nature"
+         name="Presentation Specification Nature"
+         point="org.eclipse.core.resources.natures">
+      <builder
+            id="org.eclipse.imp.presentation.builder">
+      </builder>
+      <runtime>
+         <run
+               class="org.eclipse.imp.presentation.builders.PSPNature">
+         </run>
+      </runtime>
+   </extension>
+   <extension
+         id="problem"
+         name="Presentation Specification Error"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.jdt.core.IJavaProject"
+            adaptable="false"
+            nameFilter="*"
+            id="projectContextMenu">
+         <action
+               label="Enable Presentation Specification Builder"
+               menubarPath="org.eclipse.imp.metatooling.projectContextMenu/group1"
+               tooltip="Enable the Presentation Specification builder for this project"
+               icon="icons/builderEnable.gif"
+               class="org.eclipse.imp.presentation.actions.EnableNature"
+               id="actions.enableNatureAction">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.imp.runtime.modelTreeBuilder">
+      <treeBuilder
+            class="org.eclipse.imp.presentation.treeModelBuilder.PSPTreeModelBuilder"
+            language="psp">
+      </treeBuilder>
+   </extension>
+   <extension
+         point="org.eclipse.imp.runtime.labelProvider">
+      <labelProvider
+            class="org.eclipse.imp.presentation.treeModelBuilder.PSPLabelProvider"
+            language="psp">
+      </labelProvider>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            class="org.eclipse.imp.presentation.wizards.NewSpecWizard"
+            id="org.eclipse.imp.presentation.newPresentationSpec"
+            icon="icons/sample.gif"
+            name="Presentation Specification">
+      </wizard>
+   </extension>
+
+</plugin>

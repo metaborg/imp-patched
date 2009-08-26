@@ -1,0 +1,72 @@
+package org.eclipse.imp.presentation.parser;
+
+public interface PSPKWLexersym {
+    public final static int
+      Char_DollarSign = 22,
+      Char_Percent = 23,
+      Char__ = 24,
+      Char_a = 6,
+      Char_b = 14,
+      Char_c = 10,
+      Char_d = 8,
+      Char_e = 1,
+      Char_f = 18,
+      Char_g = 11,
+      Char_h = 25,
+      Char_i = 9,
+      Char_j = 26,
+      Char_k = 15,
+      Char_l = 3,
+      Char_m = 19,
+      Char_n = 2,
+      Char_o = 4,
+      Char_p = 16,
+      Char_q = 27,
+      Char_r = 7,
+      Char_s = 12,
+      Char_t = 5,
+      Char_u = 13,
+      Char_v = 28,
+      Char_w = 29,
+      Char_x = 17,
+      Char_y = 20,
+      Char_z = 30,
+      Char_EOF = 21;
+
+    public final static String orderedTerminalSymbols[] = {
+                 "",
+                 "e",
+                 "n",
+                 "l",
+                 "o",
+                 "t",
+                 "a",
+                 "r",
+                 "d",
+                 "i",
+                 "c",
+                 "g",
+                 "s",
+                 "u",
+                 "b",
+                 "k",
+                 "p",
+                 "x",
+                 "f",
+                 "m",
+                 "y",
+                 "EOF",
+                 "DollarSign",
+                 "Percent",
+                 "_",
+                 "h",
+                 "j",
+                 "q",
+                 "v",
+                 "w",
+                 "z"
+             };
+
+    public final static int numTokenKinds = orderedTerminalSymbols.length;
+    public final static boolean isValidForParser = true;
+}
