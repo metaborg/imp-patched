@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.imp.formatting"
+      label="%featureName"
+      version="0.1.4"
+      provider-name="%providerName">
+
+   <description url="http://www.eclipse.org/imp">
+      %description
+   </description>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <url>
+      <update label="%updateSiteName" url="http://download.eclipse.org/technology/imp/updates"/>
+   </url>
+
+   <requires>
+      <import feature="sdf_eclipse_installer_feature" version="1.0.10"/>
+      <import feature="lpg.runtime" version="2.0.16" match="greaterOrEqual"/>
+      <import feature="org.eclipse.imp.runtime" version="0.1.99" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="org.eclipse.imp.box"
+         download-size="0"
+         install-size="0"
+         version="0.1.13"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.imp.formatting"
+         download-size="0"
+         install-size="0"
+         version="0.1.14"
+         unpack="false"/>
+
+</feature>
