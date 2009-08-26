@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="relengCommon" basedir=".">
+    <property name="basews" value="${ws}"/>
+    <property name="baseos" value="${os}"/>
+    <property name="basearch" value="${arch}"/>
+    <property name="basenl" value="${nl}"/>
+
+    <!-- Compiler settings. -->
+    <property name="javacFailOnError" value="true"/>
+    <property name="javacDebugInfo" value="on"/>
+    <property name="javacVerbose" value="false"/>
+
+	<echo message="java.home = ${java.home}"/>
+	<echo message="java.class.path = ${java.class.path}"/>
+    <echo message="ant.home = ${ant.home}"/>
+
+    <!-- Following assumes we're invoking the build from within some plugin project's top-level directory -->
+    <xmlproperty file="../org.eclipse.imp.releng.feature/feature.xml" prefix="releng"/>
+
+    <echo message="Building for IMP Release Engineering feature version ${releng.feature(version)}"/>
+
+    <property name="releng.version" value="${releng.feature(version)}"/>
+
+	<condition property="mac.jre.path" value="${java.home}/../Classes">
+		<os family="mac"/>
+	</condition>
+
+	<echo message="mac.jre.path = ${mac.jre.path}"/>
+
+	<path id="path_bootclasspath">
+    	<pathelement path="${java.class.path}"/>
+		<fileset dir="${mac.jre.path}">
+			<include name="*.jar"/>
+		</fileset>
+        <fileset dir="${java.home}/lib">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${ant.home}/lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <property name="bootclasspath" refid="path_bootclasspath"/>
+
+    <fail unless="imp.eclipse.target" message="You must define imp.eclipse.target as the location of the Eclipse installation against which IMP should be built."/>
+
+    <echo message="imp.eclipse.target = ${imp.eclipse.target}"/>
+
+    <path id="path_eclipse.build.path">
+        <fileset dir="${imp.eclipse.target}/plugins">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+    <pathconvert property="eclipse.build.path" refid="path_eclipse.build.path" targetos="windows"/>
+</project>
