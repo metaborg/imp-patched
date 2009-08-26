@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Leg Plug-in (Incubation)
+Bundle-SymbolicName: org.eclipse.imp.leg;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.eclipse.imp.leg.Activator
+Bundle-ActivationPolicy: lazy
+Require-Bundle: lpg.runtime,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.debug.core,
+ org.eclipse.imp.formatting,
+ org.eclipse.imp.java.hosted,
+ org.eclipse.imp.runtime,
+ org.eclipse.imp.smapifier,
+ org.eclipse.imp.xform,
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.debug,
+ org.eclipse.jface.text,
+ org.eclipse.ui,
+ org.eclipse.ui.editors,
+ org.eclipse.ui.workbench.texteditor
