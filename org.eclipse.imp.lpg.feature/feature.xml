@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.imp.lpg"
+      label="%featureName"
+      version="0.1.90"
+      provider-name="%providerName"
+      image="eclipse_update_120.jpg">
+
+   <description url="http://www.eclipse.org/imp">
+      %description
+   </description>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <url>
+      <update label="%updateSiteName" url="http://download.eclipse.org/technology/imp/updates"/>
+   </url>
+
+   <requires>
+      <import feature="lpg.runtime" version="2.0.16" match="greaterOrEqual"/>
+      <import feature="org.eclipse.imp.runtime" version="0.1.99" match="greaterOrEqual"/>
+      <import feature="org.eclipse.imp.analysis" version="0.1.6" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="org.eclipse.imp.lpg.metatooling"
+         download-size="65"
+         install-size="65"
+         version="0.1.86"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.imp.lpg"
+         download-size="65"
+         install-size="65"
+         version="0.1.83"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.imp.lpg.analysis"
+         download-size="0"
+         install-size="0"
+         version="0.1.12"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.imp.lpg.ide"
+         download-size="0"
+         install-size="0"
+         version="0.1.86"
+         unpack="false"/>
+
+</feature>
