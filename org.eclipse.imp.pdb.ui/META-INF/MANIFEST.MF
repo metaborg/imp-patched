@@ -19,6 +19,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.editors;bundle-version="3.5.0"
 Export-Package: org.eclipse.imp.pdb.browser,
  org.eclipse.imp.pdb.ui.graph,
- org.eclipse.imp.pdb.ui.text
+ org.eclipse.imp.pdb.ui.text,
+ org.eclipse.imp.pdb.ui.tree
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Import-Package: org.eclipse.ui

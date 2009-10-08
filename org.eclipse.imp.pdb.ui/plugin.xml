@@ -48,4 +48,14 @@
             name="PDB Value Graph">
       </editor>
    </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.eclipse.imp.pdb.ui.tree.Editor"
+            default="false"
+            icon="icons/graphEditor.gif"
+            id="org.eclipse.imp.pdb.ui.tree.editor"
+            name="Value Tree Editor">
+      </editor>
+   </extension>
 </plugin>
