@@ -1,12 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Program Database UI
+Bundle-Name: Program Database UI (Incubation)
 Bundle-SymbolicName: org.eclipse.imp.pdb.ui;singleton:=true
-Bundle-Version: 0.1.6
+Bundle-Version: 0.1.7
 Bundle-Activator: org.eclipse.imp.pdb.ui.PDBUIPlugin
 Bundle-ActivationPolicy: lazy
 Eclipse-LazyStart: true
-Bundle-Vendor: rfuhrer@watson.ibm.com
+Bundle-Vendor: jurgen@vinju.org
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
