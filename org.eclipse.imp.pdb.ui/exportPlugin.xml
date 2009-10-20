@@ -23,6 +23,7 @@
 		<!-- Copy necessary resources -->
 		<copy todir="${temp.folder}/${plugin.jar.name}.bin" failonerror="true" overwrite="false">
 			<fileset dir="src/" excludes="**/*.java,**/package.htm*"/>
+			<fileset dir="${basedir}" includes="plugin.xml"			/>
 		</copy>
 		<mkdir dir="${build.result.folder}"/>
 		<jar destfile="${build.result.folder}/${plugin.jar.name}" basedir="${temp.folder}/${plugin.jar.name}.bin"
