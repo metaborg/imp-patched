@@ -7,12 +7,9 @@
 *
 * Contributors:
 *    Jurgen Vinju (jurgenv@cwi.nl) - initial API and implementation
-
 *******************************************************************************/
 
 package org.eclipse.imp.formatting.builders;
-
-import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -24,7 +21,6 @@ import org.eclipse.imp.formatting.spec.Parser;
 import org.eclipse.imp.language.Language;
 import org.eclipse.imp.language.LanguageRegistry;
 import org.eclipse.imp.model.ISourceProject;
-import org.eclipse.imp.parser.IMessageHandler;
 import org.eclipse.imp.runtime.PluginBase;
 import org.eclipse.imp.utils.NullMessageHandler;
 
@@ -37,28 +33,16 @@ public class FormattingSpecificationBuilder extends BuilderBase {
 	 * the corresponding extension definition in plugin.xml. SMS 22 Mar 2007: If
 	 * that ID is set through the NewBuilder wizard, then so must this one be.
 	 */
-	// SMS 28 Mar 2007: Make plugin class name totally parameterized
-	public static final String BUILDER_ID = Activator.kPluginID
-			+ ".org.eclipse.imp.formatting.builder";
+	public static final String BUILDER_ID = Activator.kPluginID + ".org.eclipse.imp.formatting.builder";
 
-	// SMS 28 Mar 2007: Make problem id parameterized (rather than just
-	// ".problem") so that
-	// it can be given a builde-specific value (not simply composed here using
-	// the builder id
-	// because the problem id is also needed in ExtensionPointEnabler for adding
-	// the marker
-	// extension to the plugin.xml file)
-	public static final String PROBLEM_MARKER_ID = Activator.kPluginID
-			+ ".org.eclipse.imp.formatting.builder.problem";
+	public static final String PROBLEM_MARKER_ID = Activator.kPluginID + ".org.eclipse.imp.formatting.builder.problem";
 
 	// SMS 11 May 2006
 	public static final String LANGUAGE_NAME = "FormattingSpecification";
 
-	public static final Language LANGUAGE = LanguageRegistry
-			.findLanguage(LANGUAGE_NAME);
+	public static final Language LANGUAGE = LanguageRegistry.findLanguage(LANGUAGE_NAME);
 
 	protected PluginBase getPlugin() {
-		// return FormattingSpecificationPlugin.getInstance();
 		return Activator.getInstance();
 	}
 
@@ -74,9 +58,6 @@ public class FormattingSpecificationBuilder extends BuilderBase {
 		return PROBLEM_MARKER_ID;
 	}
 
-	// SMS 11 May 2006
-	// Incorporated realisitic handling of filename extensions
-	// using information recorded in the language registry
 	protected boolean isSourceFile(IFile file) {
 		IPath path = file.getRawLocation();
 		if (path == null)
@@ -101,8 +82,7 @@ public class FormattingSpecificationBuilder extends BuilderBase {
 		// TODO: If your language has non-root source files (e.g., header
 		// files), then
 		// reimplement this method to test for those
-		System.err
-				.println("FormattingSpecificationBuilder.isNonRootSourceFile(..) returning FALSE by default");
+		System.err.println("FormattingSpecificationBuilder.isNonRootSourceFile(..) returning FALSE by default");
 		return false;
 	}
 
@@ -113,8 +93,7 @@ public class FormattingSpecificationBuilder extends BuilderBase {
 	protected void collectDependencies(IFile file) {
 		// TODO: If your langauge has inter-file dependencies then reimplement
 		// this method to collect those
-		System.err
-				.println("FormattingSpecificationBuilder.collectDependencies(..) doing nothing by default");
+		System.err.println("FormattingSpecificationBuilder.collectDependencies(..) doing nothing by default");
 		return;
 	}
 
@@ -124,14 +103,8 @@ public class FormattingSpecificationBuilder extends BuilderBase {
 
 	protected void compile(final IFile file, IProgressMonitor monitor) {
 		try {
-			// START_HERE
 			System.out.println("Builder.compile with file = " + file.getName());
-			// FormattingSpecificationCompiler compiler= new
-			// FormattingSpecificationCompiler(PROBLEM_MARKER_ID);
-			// compiler.compile(file, monitor);
-			// Here we provide a substitute for the compile method that simply
-			// runs the parser in place of the compiler but creates problem
-			// markers for errors that will show up in the problems view
+
 			runParserForCompiler(file, monitor);
 
 			doRefresh(file.getParent());
