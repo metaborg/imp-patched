@@ -9,7 +9,7 @@
  *    Robert Fuhrer (rfuhrer@watson.ibm.com) - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.imp.smapifier.builder;
+package org.eclipse.imp.java.hosted;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
