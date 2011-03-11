@@ -29,13 +29,6 @@
                toolbarPath="factBrowserActions"
                id="org.eclipse.imp.pdb.factBrowser.removeFact">
          </action>
-          <action
-               label="Show Fact"
-               style="push"
-               class="org.eclipse.imp.pdb.browser.ShowAction"
-               toolbarPath="factBrowserActions"
-               id="org.eclipse.imp.pdb.factBrowser.showFact">
-         </action>
       </viewContribution>
    </extension>
    <extension
