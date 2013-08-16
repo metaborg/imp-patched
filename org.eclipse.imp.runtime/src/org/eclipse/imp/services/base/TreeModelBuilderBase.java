@@ -23,7 +23,8 @@ public abstract class TreeModelBuilderBase implements ILanguageService {
 
     private Stack<ModelTreeNode> fItemStack= new Stack<ModelTreeNode>();
 
-    public final ModelTreeNode buildTree(Object rootASTNode) {
+    // LK: public interface shouldn't be final
+    public ModelTreeNode buildTree(Object rootASTNode) {
         fItemStack.push(fModelRoot= createTopItem(new ModelTreeNode(rootASTNode)));
         try {
             visitTree(rootASTNode);

@@ -48,6 +48,11 @@ public class ServiceControllerManager {
         if (fLanguageServiceManager.getHyperLinkDetector() != null)
             fHyperLinkController= new SourceHyperlinkController(fLanguageServiceManager.getHyperLinkDetector(), fTextEditor);
     }
+    
+    public ServiceControllerManager() { // LK: TODO: REMOVE ME
+    	fTextEditor = null;
+    
+    }
 
     public void initialize() {
         IRegionSelectionService regionSelector= (IRegionSelectionService) fTextEditor.getAdapter(IRegionSelectionService.class);

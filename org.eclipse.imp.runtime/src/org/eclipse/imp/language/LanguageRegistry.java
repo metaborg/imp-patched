@@ -14,6 +14,7 @@ package org.eclipse.imp.language;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -21,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IPath;
@@ -134,7 +137,15 @@ public class LanguageRegistry {
 	public static Language findLanguage(IEditorInput editorInput, IDocumentProvider docProvider) {
 		if (!sIsFullyInitialized)
 			initializeRegistryAsNeeded();
-		IPath path= EditorInputUtils.getPath(editorInput);
+		
+		// LK: get full path
+		IFile file = EditorInputUtils.getFile(editorInput);
+		IPath path;
+		if (file != null) {
+			path = file.getFullPath();
+		} else {
+			path = EditorInputUtils.getPath(editorInput);
+		}
 
 		return findLanguage(path, docProvider.getDocument(editorInput));
 	}
@@ -164,7 +175,9 @@ public class LanguageRegistry {
 		            LanguageValidator validator = lang.getValidator();
 
 		            if (validator != null && docContents != null) {
-		                if (validator.validate(docContents)) {
+		            	// LK: needed for MetaFileLanguageValidator
+		            	IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+		            	if (validator.validate(file) ||validator.validate(docContents)) {
 		                    return lang;
 		                }
 		            } else {
@@ -174,6 +187,7 @@ public class LanguageRegistry {
 		    }
 		}
 
+		/* LK: We can return null; let the client handle it!
 		if (PreferenceCache.emitMessages) {
 			RuntimePlugin.getInstance().writeErrorMsg("No language support for text/source file of type '" +
 					 extension + "'.");
@@ -181,6 +195,7 @@ public class LanguageRegistry {
 			ErrorHandler.reportError("No language support for text/source file of type '" +
 					 extension + "'.");
 		}
+		*/
 
 		return null;
 	}
@@ -326,7 +341,11 @@ public class LanguageRegistry {
 
             try {
                 if (this.iconPath != null) {
-                    is = bundle.getResource(iconPath).openStream();
+                	// VV to avoid a NullPointerException
+                	URL icpath = bundle.getResource(iconPath);
+                	if(icpath != null){
+                		is = icpath.openStream();
+                	}
                 }
             } catch (IOException e) {
                 RuntimePlugin.getInstance().logException("Unable to find icon for language " + langName, e);
@@ -383,7 +402,10 @@ public class LanguageRegistry {
         for (String ext : extensions) {
 	        IFileEditorMapping mapping= findMappingFor(ext, mappings);
 
-	        if (mapping == null || mapping.getDefaultEditor().getId().equals(sUniversalEditor.getId())) {
+	        if (mapping == null
+	        		|| (!(mapping instanceof IMPFileEditorMapping) // LK: mapping may already be a IMPFileEditorMapping 
+	        			 && (mapping.getDefaultEditor() == null
+	        		         || mapping.getDefaultEditor().getId().equals(sUniversalEditor.getId())))) {
 	            // Replace the file editor mapping even if it already pointed to the universal editor,
 	            // since the persisted association turns into a FileEditorMapping when re-read, thus
 	            // losing the icon (which FileEditorMapping gets from the IEditorDescriptor).

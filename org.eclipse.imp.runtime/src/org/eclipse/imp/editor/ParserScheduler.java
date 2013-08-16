@@ -29,6 +29,7 @@ import org.eclipse.imp.runtime.RuntimePlugin;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
 /**
@@ -37,7 +38,7 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
  */
 // TODO Perhaps this should be driven off of the "IReconcilingStrategy" mechanism?
 public class ParserScheduler extends Job {
-    private final IParseController fParseController;
+    private IParseController fParseController;
 
     private final IEditorPart fEditorPart;
 
@@ -64,7 +65,8 @@ public class ParserScheduler extends Job {
     }
 
     public IStatus run(IProgressMonitor monitor) {
-        if (fParseController == null || fDocumentProvider == null) {
+    	 // LK: test if document provider is null to find out if editor was closed
+        if (fParseController == null || ((AbstractTextEditor) fEditorPart).getDocumentProvider() == null) {
             /* Editor was closed, or no parse controller */
             return Status.OK_STATUS;
         }
@@ -82,10 +84,12 @@ public class ParserScheduler extends Job {
             // Just make sure the document contents gets parsed once (and only once).
             fMsgHandler.clearMessages();
             fParseController.parse(document.get(), monitor);
-            if (!monitor.isCanceled())
+            if (!monitor.isCanceled()) {
                 notifyModelListeners(monitor);
+            }
         } catch (Exception e) {
-            ErrorHandler.reportError("Error running parser for language " + fParseController.getLanguage().getName() + " and input " + editorInput.getName() + ":", e);
+        	// LK: null check
+            ErrorHandler.reportError("Error running parser for language " + (fParseController == null ? "null" : fParseController.getLanguage().getName()) + " and input " + editorInput.getName() + ":", e);
             // RMF 8/2/2006 - Notify the AST listeners even on an exception - the compiler front end
             // may have failed at some phase, but there may be enough info to drive IDE services.
             notifyModelListeners(monitor);
@@ -146,4 +150,8 @@ public class ParserScheduler extends Job {
             RuntimePlugin.getInstance().writeInfoMsg("No AST; bypassing listener notification.");
         }
     }
+
+	public void dispose() { // LK
+		fParseController = null;
+	}
 }

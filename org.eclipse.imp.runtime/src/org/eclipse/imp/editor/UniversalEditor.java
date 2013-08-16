@@ -11,10 +11,13 @@
 
 package org.eclipse.imp.editor;
 
+import static org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants.EDITOR_TAB_WIDTH;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +34,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.ui.actions.IToggleBreakpointsTarget;
 import org.eclipse.debug.ui.actions.ToggleBreakpointAction;
 import org.eclipse.help.IContextProvider;
@@ -42,6 +48,7 @@ import org.eclipse.imp.core.ErrorHandler;
 import org.eclipse.imp.editor.internal.AnnotationCreator;
 import org.eclipse.imp.editor.internal.EditorErrorTickUpdater;
 import org.eclipse.imp.editor.internal.FoldingController;
+import org.eclipse.imp.editor.internal.PresentationController;
 import org.eclipse.imp.editor.internal.ProblemMarkerManager;
 import org.eclipse.imp.editor.internal.ToggleBreakpointsAdapter;
 import org.eclipse.imp.help.IMPHelp;
@@ -163,6 +170,7 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 import org.eclipse.ui.handlers.IHandlerActivation;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.progress.UIJob;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.ui.texteditor.ContentAssistAction;
 import org.eclipse.ui.texteditor.IEditorStatusLine;
@@ -240,6 +248,9 @@ public class UniversalEditor extends TextEditor implements IASTFindReplaceTarget
     private static final String BUNDLE_FOR_CONSTRUCTED_KEYS= MESSAGE_BUNDLE;//$NON-NLS-1$
 
     private static final String IMP_EDITOR_CONTEXT= RuntimePlugin.IMP_RUNTIME + ".imp_editor_context";
+    
+    // LK
+    private final Set<IDocumentListener> onSaveListeners = new HashSet<IDocumentListener>();
 
     static ResourceBundle fgBundleForConstructedKeys= ResourceBundle.getBundle(BUNDLE_FOR_CONSTRUCTED_KEYS);
 
@@ -252,10 +263,44 @@ public class UniversalEditor extends TextEditor implements IASTFindReplaceTarget
         // already defined for the parent text editor and populated with relevant
         // preferences
         // setPreferenceStore(RuntimePlugin.getInstance().getPreferenceStore());
-        setSourceViewerConfiguration(new StructuredSourceViewerConfiguration());
         configureInsertMode(SMART_INSERT, true);
         setInsertMode(SMART_INSERT);
         fProblemMarkerManager= new ProblemMarkerManager();
+    }
+    
+    public ServiceControllerManager getServiceControllerManager() { // LK
+        return fServiceControllerManager;
+    }
+    
+    public LanguageServiceManager getLanguageServiceManager() { // LK
+        return fLanguageServiceManager;
+    }
+    
+    public IPreferenceStore getThePreferenceStore() { // LK
+    	return super.getPreferenceStore();
+    }
+    
+    public void addOnSaveListener(IDocumentListener listener) { // LK
+    	onSaveListeners.add(listener);
+    }
+    
+    public void removeOnSaveListener(IDocumentListener listener) { // LK
+    	onSaveListeners.remove(listener);
+    }
+    
+    public void updateColoring(Region region) { // LK
+    	final PresentationController presentation = fServiceControllerManager.getPresentationController();
+		presentation.damage(region);
+		// Must run in main thread in order not to keep further updates waiting
+		UIJob job = new UIJob("Update presentation") {
+			@Override
+			public IStatus runInUIThread(IProgressMonitor monitor) {
+				presentation.update(fLanguageServiceManager.getParseController(), monitor);
+				return Status.OK_STATUS;
+			}
+		};
+		job.setSystem(true);
+		job.schedule();
     }
 
     public Object getAdapter(Class required) {
@@ -307,20 +352,6 @@ public class UniversalEditor extends TextEditor implements IASTFindReplaceTarget
         markAsStateDependentAction("Format", true); //$NON-NLS-1$
         markAsSelectionDependentAction("Format", true); //$NON-NLS-1$
 //      PlatformUI.getWorkbench().getHelpSystem().setHelp(action, IJavaHelpContextIds.FORMAT_ACTION);
-
-        action= new TextOperationAction(bundle, "ShowOutline.", this, StructuredSourceViewer.SHOW_OUTLINE); //$NON-NLS-1$
-        action.setActionDefinitionId(SHOW_OUTLINE_COMMAND);
-        setAction(SHOW_OUTLINE_COMMAND, action); //$NON-NLS-1$
-//      PlatformUI.getWorkbench().getHelpSystem().setHelp(action, IJavaHelpContextIds.SHOW_OUTLINE_ACTION);
-
-        action= new TextOperationAction(bundle, "ToggleComment.", this, StructuredSourceViewer.TOGGLE_COMMENT); //$NON-NLS-1$
-        action.setActionDefinitionId(TOGGLE_COMMENT_COMMAND);
-        setAction(TOGGLE_COMMENT_COMMAND, action); //$NON-NLS-1$
-//      PlatformUI.getWorkbench().getHelpSystem().setHelp(action, IJavaHelpContextIds.TOGGLE_COMMENT_ACTION);
-
-        action= new TextOperationAction(bundle, "IndentSelection.", this, StructuredSourceViewer.INDENT_SELECTION); //$NON-NLS-1$
-        action.setActionDefinitionId(INDENT_SELECTION_COMMAND);
-        setAction(INDENT_SELECTION_COMMAND, action); //$NON-NLS-1$
 
         action= new GotoMatchingFenceAction(this);
         action.setActionDefinitionId(GOTO_MATCHING_FENCE_COMMAND);
@@ -696,13 +727,14 @@ public class UniversalEditor extends TextEditor implements IASTFindReplaceTarget
         IEditorInput editorInput= getEditorInput();
         IFile file= EditorInputUtils.getFile(editorInput);
         IPath filePath= EditorInputUtils.getPath(editorInput);
+    	// LK: initialize parse controller even if project cannot be determined
+        ISourceProject srcProject = null;
         try {
-            ISourceProject srcProject= (file != null) ? ModelFactory.open(file.getProject()) : null;
-
-            fLanguageServiceManager.getParseController().initialize(filePath, srcProject, fAnnotationCreator);
+           srcProject = ModelFactory.open(file.getProject());
         } catch (ModelException e) {
             ErrorHandler.reportError("Error initializing parser for input " + editorInput.getName() + ":", e);
         }
+        fLanguageServiceManager.getParseController().initialize(filePath, srcProject, fAnnotationCreator);
     }
 
     private void findLanguageSpecificPreferences() {
@@ -919,7 +951,7 @@ public class UniversalEditor extends TextEditor implements IASTFindReplaceTarget
 
     private void initiateServiceControllers() {
         try {
-            StructuredSourceViewer sourceViewer= (StructuredSourceViewer) getSourceViewer();
+        	ProjectionViewer sourceViewer= (ProjectionViewer) getSourceViewer();
 
             if (PreferenceCache.emitMessages) {
                 RuntimePlugin.getInstance().writeInfoMsg(
@@ -937,21 +969,11 @@ public class UniversalEditor extends TextEditor implements IASTFindReplaceTarget
             // the source viewer, now that we actually have the hover provider.
             sourceViewer.setTextHover(fServiceControllerManager.getHoverHelpController(), IDocument.DEFAULT_CONTENT_TYPE);
 
-            // The source viewer configuration has already been asked for its IContentFormatter,
-            // but before we actually instantiated the relevant controller class. So update the
-            // source viewer, now that we actually have the IContentFormatter.
-            ContentFormatter formatter= new ContentFormatter();
-
-            formatter.setFormattingStrategy(fServiceControllerManager.getFormattingController(), IDocument.DEFAULT_CONTENT_TYPE);
-            sourceViewer.setFormatter(formatter);
-
             try {
                 fServiceControllerManager.getPresentationController().damage(new Region(0, sourceViewer.getDocument().getLength()));
             } catch (Exception e) {
                 ErrorHandler.reportError("Error during initial damage repair", e);
             }
-            // SMS 29 May 2007 (to give viewer access to single-line comment prefix)
-            sourceViewer.setParseController(fLanguageServiceManager.getParseController());
 
             if (fLanguageServiceManager.getFoldingUpdater() != null) {
                 ProjectionViewer projViewer= (ProjectionViewer) sourceViewer;
@@ -974,14 +996,16 @@ public class UniversalEditor extends TextEditor implements IASTFindReplaceTarget
 
             installExternalEditorServices();
             watchDocument(REPARSE_SCHEDULE_DELAY);
-            fParserScheduler.run(new NullProgressMonitor());
+            // LK: schedule instead of synchronously run parser
+            // fParserScheduler.run(new NullProgressMonitor());
+            fParserScheduler.schedule();
             
         } catch (Exception e) {
             ErrorHandler.reportError("Error while creating service controllers", e);
         }
     }
     
-    private static final int REPARSE_SCHEDULE_DELAY= 100;
+    private static final int REPARSE_SCHEDULE_DELAY= 75;
 
     private void setTitleImageFromLanguageIcon() {
         // Only set the editor's title bar icon if the language has a label provider
@@ -1099,9 +1123,13 @@ public class UniversalEditor extends TextEditor implements IASTFindReplaceTarget
           fActionBars = null;
         }
         
+        if (fParserScheduler != null) { // LK
+        	fParserScheduler.dispose();
+        }
+        
         super.dispose();
     }
-
+    
     /**
      * Override creation of the normal source viewer with one that supports source folding.
      */
@@ -1466,11 +1494,17 @@ public class UniversalEditor extends TextEditor implements IASTFindReplaceTarget
         fParserScheduler.removeModelListener(listener);
     }
 
-    class StructuredSourceViewerConfiguration extends TextSourceViewerConfiguration {
+    public class StructuredSourceViewerConfiguration extends TextSourceViewerConfiguration {
         public int getTabWidth(ISourceViewer sourceViewer) {
             boolean langSpecificSetting= fLangSpecificPrefs != null && fLangSpecificPrefs.isDefined(PreferenceConstants.P_TAB_WIDTH);
 
-            return langSpecificSetting ? fLangSpecificPrefs.getIntPreference(PreferenceConstants.P_TAB_WIDTH) : PreferenceCache.tabWidth;
+            if (langSpecificSetting) {
+            	return fLangSpecificPrefs.getIntPreference(PreferenceConstants.P_TAB_WIDTH);
+            } else {
+            	// LK: instead of using PreferenceCache.tabWidth, use one of the language-generic settings of Eclipse
+        		IPreferenceStore preferences = getThePreferenceStore();
+        		return preferences.getInt(EDITOR_TAB_WIDTH);
+            }
         }
 
         public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
@@ -1491,6 +1525,7 @@ public class UniversalEditor extends TextEditor implements IASTFindReplaceTarget
             ContentAssistant ca= new ContentAssistant();
             ca.setContentAssistProcessor(fServiceControllerManager.getCompletionProcessor(), IDocument.DEFAULT_CONTENT_TYPE);
             ca.setInformationControlCreator(getInformationControlCreator(sourceViewer));
+            ca.enableColoredLabels(true); // LK
             return ca;
         }
 
@@ -1771,7 +1806,8 @@ public class UniversalEditor extends TextEditor implements IASTFindReplaceTarget
                 if (fServiceControllerManager.getPresentationController() != null) {
 //                  System.out.println("Scheduling repair for damage to region " + damage.getOffset() + ":" + damage.getLength() + " in doc of length " + fDocument.getLength());
                     fServiceControllerManager.getPresentationController().damage(damage);
-                    if (hyperlinkRestore) {
+                    // LK: just always color for post-marker color correctness
+                    if (hyperlinkRestore || true) {
 //                      System.out.println("** Forcing repair for hyperlink damage to region " + damage.getOffset() + ":" + damage.getLength() + " in doc of length " + fDocument.getLength());
                         fServiceControllerManager.getPresentationController().update(fLanguageServiceManager.getParseController(), fProgressMonitor);
                     }
@@ -1845,6 +1881,7 @@ public class UniversalEditor extends TextEditor implements IASTFindReplaceTarget
     }
 
     public IParseController getParseController() {
+    	if (fLanguageServiceManager == null) return null; // LK
         return fLanguageServiceManager.getParseController();
     }
     
@@ -1861,7 +1898,23 @@ public class UniversalEditor extends TextEditor implements IASTFindReplaceTarget
 		// SMS 25 Apr 2007:  Removing parser annotations here
 		// may not hurt but also doesn't seem to be necessary
 		//removeParserAnnotations();
+		DocumentEvent event = null;
+		try {
+			event = new DocumentEvent(getServiceControllerManager().getSourceViewer().getDocument(), 0, 0, null);
+			for (IDocumentListener listener : onSaveListeners)
+				listener.documentAboutToBeChanged(event);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		}
+		
 		super.doSave(progressMonitor);
+		
+		try {
+			for (IDocumentListener listener : onSaveListeners)
+				listener.documentChanged(event);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		}
 	}
 
     public void removeParserAnnotations() {

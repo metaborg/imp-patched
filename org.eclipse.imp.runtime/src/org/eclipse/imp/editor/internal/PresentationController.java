@@ -13,6 +13,7 @@ package org.eclipse.imp.editor.internal;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
@@ -37,6 +38,7 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * A class that does the real work of repairing the text presentation for an associated ISourceViewer.
@@ -109,22 +111,38 @@ public class PresentationController implements IModelListener {
         IRegion bigRegion= fColorer.calculateDamageExtent(region, fParseCtlr);
 
         if (bigRegion != null) {
+        	// LK: (no changes, just a comment)
+        	// Implicit synchronization here risks a deadlock in the colorer implementation,
+        	// which might need main thread access to create new SWT Color Objects
             fWorkItems.push(bigRegion);
         }
     }
 
     public void update(IParseController controller, IProgressMonitor monitor) {
-        if (!monitor.isCanceled()) {
+        // LK: only run in the UI thread so color objects are created there
+    	if (PlatformUI.getWorkbench().getActiveWorkbenchWindow() == null)
+        	return;
+    	if (!monitor.isCanceled()) {
 //            if (fWorkItems.size() == 0) {
 //                ConsoleUtil.findConsoleStream(PresentationController.CONSOLE_NAME).println("PresentationController.update() called, but no damage in the work queue?");
 //            }
-            synchronized (fWorkItems) {
-                for(int n= fWorkItems.size() - 1; !monitor.isCanceled() && n >= 0; n--) {
-                    Region damage= (Region) fWorkItems.get(n);
-                    changeTextPresentationForRegion(controller, monitor, damage);
-                }
-                if (!monitor.isCanceled())
-                    fWorkItems.removeAllElements();
+        	// LK: locking using fWorkItems as syncroot can result in deadlocks
+            synchronized (this) {
+            	try {
+	                while (!monitor.isCanceled() && !fWorkItems.isEmpty()) {
+	                    Region damage = (Region) fWorkItems.pop();
+	                    synchronized (fWorkItems) { // LK: clean up work items queue
+	                    	while (!fWorkItems.isEmpty()
+	                    			&& (fWorkItems.peek().getOffset() >= damage.getOffset() && fWorkItems.peek().getLength() <= damage.getLength()))
+	                    		fWorkItems.pop();
+	                    }
+	                    changeTextPresentationForRegion(controller, monitor, damage);
+	                }
+	                // if (!monitor.isCanceled())
+	                //    fWorkItems.removeAllElements();
+            	} catch (EmptyStackException e) {
+            		// Ignore
+            	}
             }
         }
     }
@@ -157,7 +175,7 @@ public class PresentationController implements IModelListener {
             int offset= locator.getStartOffset(token);
             int end= locator.getEndOffset(token);
 
-            if (offset <= prevEnd && end >= prevOffset) {
+            if (offset <= prevEnd || end <= prevEnd /*&& end >= prevOffset*/) { // LK: Avoid illegal styleRange
                 continue;
             }
             changeTokenPresentation(parseController, presentation, token, locator);
@@ -176,7 +194,7 @@ public class PresentationController implements IModelListener {
         
        // SMS 21 Jun 2007:  negative (possibly 0) length style ranges seem to cause problems;
         // but if you have one it should lead to an IllegalArgumentException in changeTextPresentation(..)
-        if (styleRange.length <= 0 || styleRange.start + styleRange.length > this.fSourceViewer.getDocument().getLength()) {
+        if (styleRange.length <= 0 ||  this.fSourceViewer.getDocument() == null || styleRange.start + styleRange.length > this.fSourceViewer.getDocument().getLength()) {
         } else {
             presentation.addStyleRange(styleRange);
         }
@@ -190,6 +208,7 @@ public class PresentationController implements IModelListener {
             	// SMS 16 Sep 2008
             	int charCount;
             	if (fSourceViewer != null) {
+            		if (fSourceViewer.getDocument() == null) return; // LK: handle closed documents better
             		charCount = fSourceViewer.getDocument().getLength();
             	} else {
             		charCount = 0;
@@ -201,7 +220,7 @@ public class PresentationController implements IModelListener {
             	int lastLength = presentation.getLastStyleRange().length;
             	int end = lastStart + lastLength;
         		TextPresentation newPresentation = null;
-            	if (end >= charCount) {
+            	if (end > charCount) { // LK: > not >=
             		newPresentation = new TextPresentation();
             		Iterator presIt = presentation.getAllStyleRangeIterator();
             		while (presIt.hasNext()) {

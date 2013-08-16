@@ -42,7 +42,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         if (fontData != null && fontData.length > 0)
             PreferenceConverter.setDefault(store, PreferenceConstants.P_SOURCE_FONT, fontData);
 
-        store.setDefault(PreferenceConstants.P_TAB_WIDTH, 8);
+        store.setDefault(PreferenceConstants.P_TAB_WIDTH, 4); // LK: sane default tab width
         store.setDefault(PreferenceConstants.P_DUMP_TOKENS, false);
         store.setDefault(PreferenceConstants.EDITOR_MATCHING_BRACKETS, true);
 

@@ -21,6 +21,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
+import org.eclipse.jface.text.source.ILineDiffInfo;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.projection.AnnotationBag;
 
@@ -30,6 +31,7 @@ public class AnnotationUtils {
 
     public static String formatAnnotationList(List<Annotation> annotations) {
         if (annotations != null) {
+            removeLineDiffInfo(annotations); // LK
             if (annotations.size() == 1) {
                 // optimization
                 Annotation annotation= (Annotation) annotations.get(0);
@@ -52,6 +54,15 @@ public class AnnotationUtils {
         return null;
     }
 
+	private static void removeLineDiffInfo(List<Annotation> annotations) { // LK
+		if (annotations == null) return;
+		for (Iterator<Annotation> iter = annotations.iterator(); iter.hasNext(); ) {
+    		Annotation annotation = iter.next();
+    		if (annotation.getText() == null || annotation instanceof ILineDiffInfo)
+    			iter.remove();
+    	}
+	}
+	
     public static IAnnotationModel getAnnotationModel(ISourceViewer viewer) {
         // if (viewer instanceof ISourceViewerExtension2) {
         // ISourceViewerExtension2 extension= (ISourceViewerExtension2) viewer;

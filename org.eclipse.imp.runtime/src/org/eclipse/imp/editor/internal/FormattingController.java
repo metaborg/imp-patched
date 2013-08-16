@@ -33,7 +33,8 @@ public class FormattingController implements IFormattingStrategy {
     }
 
     public void formatterStarts(String initialIndentation) {
-        fFormattingStrategy.formatterStarts(initialIndentation);
+    	if (fFormattingStrategy != null)
+    		fFormattingStrategy.formatterStarts(initialIndentation);
     }
 
     public String format(String content, boolean isLineStart, String indentation, int[] positions) {

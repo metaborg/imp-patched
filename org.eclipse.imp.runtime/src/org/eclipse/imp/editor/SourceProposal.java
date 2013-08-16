@@ -134,7 +134,9 @@ public class SourceProposal implements ICompletionProposal {
 
     public void apply(IDocument document) {
         try {
-            document.replace(fRange.getOffset(), fRange.getLength(), fNewText.substring(fPrefix.length()));
+        	// LK: use accessors
+            Region range = getRange();
+			document.replace(range.getOffset(), range.getLength(), getNewText().substring(getPrefix().length()));
         } catch (BadLocationException e) {
             e.printStackTrace();
         }
@@ -155,6 +157,18 @@ public class SourceProposal implements ICompletionProposal {
     public Image getImage() {
         return null;
     }
+    
+    public String getNewText() { // LK
+		return fNewText;
+	}
+    
+    public Region getRange() { // LK
+		return fRange;
+	}
+    
+    public String getPrefix() { // LK
+		return fPrefix;
+	}
 
     public IContextInformation getContextInformation() {
         return null;

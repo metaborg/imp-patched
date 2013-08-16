@@ -17,7 +17,7 @@ import org.eclipse.swt.graphics.Font;
 public class PreferenceCache {
     public static boolean emitMessages= false;
 
-    public static int tabWidth= 8;
+    public static int tabWidth= 4; // LK: sane default tab width
 
     public static Font sourceFont;
 
