@@ -157,19 +157,24 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.SubActionBars;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 import org.eclipse.ui.handlers.IHandlerActivation;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.progress.UIJob;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.ui.texteditor.ContentAssistAction;
@@ -674,6 +679,29 @@ public class UniversalEditor extends TextEditor implements IASTFindReplaceTarget
     }
 
     public void createPartControl(Composite parent) {
+    	if (this.getClass() == UniversalEditor.class) {
+    		final UniversalEditor universalEditor = this;
+    		final IEditorRegistry editorRegistry = PlatformUI.getWorkbench().getEditorRegistry();
+    		final IWorkbenchPage page = getSite().getPage();
+    		final IEditorDescriptor desc = editorRegistry.getDefaultEditor(getEditorInput().getName());
+    		
+            PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+                public void run() {
+            		page.closeEditor(universalEditor, false);
+            		if (!desc.equals(editorRegistry.findEditor(EDITOR_ID))) {
+            			IFile file = EditorInputUtils.getFile(universalEditor.getEditorInput());
+            			try {
+							page.openEditor(new FileEditorInput(file), desc.getId());
+						} catch (PartInitException e) {
+							e.printStackTrace();
+						}
+            		}
+                }
+            });
+
+    		return;
+    	}
+    	
         fLanguage= LanguageRegistry.findLanguage(getEditorInput(), getDocumentProvider());
 
         // SMS 10 Oct 2008:  null check added per bug #242949
