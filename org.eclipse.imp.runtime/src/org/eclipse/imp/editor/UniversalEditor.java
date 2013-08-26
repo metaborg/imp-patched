@@ -680,10 +680,12 @@ public class UniversalEditor extends TextEditor implements IASTFindReplaceTarget
 
     public void createPartControl(Composite parent) {
     	if (this.getClass() == UniversalEditor.class) {
+    		super.createPartControl(parent);
+    		
     		final UniversalEditor universalEditor = this;
     		final IEditorRegistry editorRegistry = PlatformUI.getWorkbench().getEditorRegistry();
     		final IWorkbenchPage page = getSite().getPage();
-    		final IEditorDescriptor desc = editorRegistry.getDefaultEditor(getEditorInput().getName());
+    		final IEditorDescriptor desc = editorRegistry.findEditor("org.eclipse.imp.runtime.editor.spoofaxEditor");
     		
             PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
                 public void run() {
