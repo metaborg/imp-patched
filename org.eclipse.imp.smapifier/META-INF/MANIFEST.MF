@@ -12,7 +12,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.imp.smapi,
  org.eclipse.imp.runtime,
  org.eclipse.jdt.core,
- org.eclipse.ui
+ org.eclipse.ui,
+ com.ibm.wala.shrike
 Export-Package: org.eclipse.imp.smapifier.actions,
  org.eclipse.imp.smapifier.builder
 Bundle-Vendor: rfuhrer@watson.ibm.com
