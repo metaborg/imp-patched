@@ -15,4 +15,13 @@
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 	</build>
+
+	<developers>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git@github.com:metaborg/imp-patched.git</connection>
+		<developerConnection>scm:git:git@github.com:metaborg/imp-patched.git</developerConnection>
+		<url>https://github.com/metaborg/imp-patched</url>
+	</scm>
 </project>
