@@ -1,9 +1,9 @@
-package org.eclipse.imp.test.nul.tokenColorer;
+package org.eclipse.imp.test.nulll.tokenColorer;
 
 import org.eclipse.imp.parser.IParseController;
 import org.eclipse.imp.services.ITokenColorer;
 import org.eclipse.imp.services.base.TokenColorerBase;
-import org.eclipse.imp.test.nul.parser.NullParsersym;
+import org.eclipse.imp.test.nulll.parser.NullParsersym;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.TextAttribute;
 

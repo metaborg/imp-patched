@@ -1,4 +1,4 @@
-package org.eclipse.imp.test.nul.parser;
+package org.eclipse.imp.test.nulll.parser;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.imp.parser.IParseController;
@@ -6,7 +6,7 @@ import org.eclipse.imp.parser.ISourcePositionLocator;
 import org.eclipse.imp.parser.MessageHandlerAdapter;
 import org.eclipse.imp.parser.SimpleLPGParseController;
 import org.eclipse.imp.services.ILanguageSyntaxProperties;
-import org.eclipse.imp.test.nul.Activator;
+import org.eclipse.imp.test.nulll.Activator;
 
 /**
  * @author rfuhrer@watson.ibm.com

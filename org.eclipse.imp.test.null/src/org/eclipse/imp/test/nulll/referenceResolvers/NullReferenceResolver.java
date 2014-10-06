@@ -1,4 +1,4 @@
-package org.eclipse.imp.test.nul.referenceResolvers;
+package org.eclipse.imp.test.nulll.referenceResolvers;
 
 import org.eclipse.imp.language.ILanguageService;
 import org.eclipse.imp.parser.IParseController;

@@ -1,4 +1,4 @@
-package org.eclipse.imp.test.nul.parser;
+package org.eclipse.imp.test.nulll.parser;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.imp.parser.ISourcePositionLocator;

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Null Language
 Bundle-SymbolicName: org.eclipse.imp.test.null;singleton:=true
 Bundle-Version: 0.1.0
-Bundle-Activator: org.eclipse.imp.test.nul.Activator
+Bundle-Activator: org.eclipse.imp.test.nulll.Activator
 Bundle-Vendor: rfuhrer@watson.ibm.com
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

@@ -1,4 +1,4 @@
-package org.eclipse.imp.test.nul.foldingUpdater;
+package org.eclipse.imp.test.nulll.foldingUpdater;
 
 import java.util.HashMap;
 import java.util.List;

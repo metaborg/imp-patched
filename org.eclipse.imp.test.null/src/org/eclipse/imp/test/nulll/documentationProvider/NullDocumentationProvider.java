@@ -1,9 +1,9 @@
-package org.eclipse.imp.test.nul.documentationProvider;
+package org.eclipse.imp.test.nulll.documentationProvider;
 
 import org.eclipse.imp.language.ILanguageService;
 import org.eclipse.imp.parser.IParseController;
 import org.eclipse.imp.services.IDocumentationProvider;
-import org.eclipse.imp.test.nul.parser.Ast.ASTNode;
+import org.eclipse.imp.test.nulll.parser.Ast.ASTNode;
 
 public class NullDocumentationProvider implements IDocumentationProvider, ILanguageService {
 

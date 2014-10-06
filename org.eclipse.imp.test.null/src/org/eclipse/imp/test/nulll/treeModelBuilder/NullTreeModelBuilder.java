@@ -1,4 +1,4 @@
-package org.eclipse.imp.test.nul.treeModelBuilder;
+package org.eclipse.imp.test.nulll.treeModelBuilder;
 
 import org.eclipse.imp.services.base.TreeModelBuilderBase;
 

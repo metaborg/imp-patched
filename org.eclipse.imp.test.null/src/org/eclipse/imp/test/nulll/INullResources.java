@@ -1,4 +1,4 @@
-package org.eclipse.imp.test.nul;
+package org.eclipse.imp.test.nulll;
 
 public interface INullResources {
 

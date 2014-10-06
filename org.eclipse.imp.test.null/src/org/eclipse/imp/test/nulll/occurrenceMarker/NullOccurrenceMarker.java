@@ -1,4 +1,4 @@
-package org.eclipse.imp.test.nul.occurrenceMarker;
+package org.eclipse.imp.test.nulll.occurrenceMarker;
 
 import java.util.List;
 

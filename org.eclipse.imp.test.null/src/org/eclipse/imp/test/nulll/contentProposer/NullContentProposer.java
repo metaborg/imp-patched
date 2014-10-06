@@ -1,4 +1,4 @@
-package org.eclipse.imp.test.nul.contentProposer;
+package org.eclipse.imp.test.nulll.contentProposer;
 
 import org.eclipse.imp.parser.IParseController;
 import org.eclipse.imp.services.IContentProposer;

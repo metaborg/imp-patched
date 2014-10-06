@@ -1,4 +1,4 @@
-package org.eclipse.imp.test.nul;
+package org.eclipse.imp.test.nulll;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.preferences.DefaultScope;
