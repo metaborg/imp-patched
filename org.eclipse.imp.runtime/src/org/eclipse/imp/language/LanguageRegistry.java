@@ -14,6 +14,8 @@ package org.eclipse.imp.language;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -415,7 +417,17 @@ public class LanguageRegistry {
             FileEditorMapping fem= (FileEditorMapping) mapping;
 
             if (defaultEditor == null || defaultEditor.getId().equals("")) {
-                fem.setDefaultEditor((EditorDescriptor) sUniversalEditor);
+                // original code without reflection: fem.setDefaultEditor((EditorDescriptor) sUniversalEditor);
+            	final Method setDefaultEditorMethod = getSetDefaultEditorMethod();
+            	try {
+					setDefaultEditorMethod.invoke(fem, sUniversalEditor);
+				} catch (IllegalAccessException e) {
+					throw new RuntimeException("Could not set default editor", e);
+				} catch (IllegalArgumentException e) {
+					throw new RuntimeException("Could not set default editor", e);
+				} catch (InvocationTargetException e) {
+					throw new RuntimeException("Could not set default editor", e);
+				}
 	        } else {
 	        	// SMS 19 Nov 2008
 	        	// Revised else branch according to patch provided by Edward Willink
@@ -454,7 +466,30 @@ public class LanguageRegistry {
 	        newMap.add(mapping);
 	    }
 	}
+	
+	/**
+	 * Gets the correct {@link FileEditorMapping#setDefaultEditor} method via
+	 * reflection. Parameter changed from EditorDescriptor to IEditorDescriptor
+	 * in Eclipse Mars.
+	 */
+	private static Method getSetDefaultEditorMethod() {
+		final String methodName = "setDefaultEditor";
+		try {
+			return FileEditorMapping.class.getDeclaredMethod(methodName,
+					EditorDescriptor.class);
+		} catch (NoSuchMethodException e1) {
+			try {
+				return FileEditorMapping.class.getDeclaredMethod(methodName,
+						IEditorDescriptor.class);
+			} catch (NoSuchMethodException e2) {
+				throw new RuntimeException(
+						"Cannot find setDefaultEditor method via reflection",
+						e2);
+			}
+		}
+	}
 
+	
 	private void addEditorIfNeeded(IMPFileEditorMapping fem, EditorDescriptor editor) {
         // SMS 19 Nov 2008
         // Revised else branch according to patch provided by Edward Willink
