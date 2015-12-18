@@ -1,6 +1,6 @@
 Bundle-SymbolicName: org.eclipse.imp.lpg.metatooling;singleton:=true
 Bundle-Name: LPG IDE (Incubation)
-Bundle-Version: 1.5.0.qualifier
+Bundle-Version: 1.5.1.qualifier
 Bundle-Activator: org.eclipse.imp.lpg.LPGPlugin
 Bundle-ActivationPolicy: lazy
 Eclipse-LazyStart: true
