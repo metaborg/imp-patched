@@ -4,7 +4,7 @@ Bundle-Name: IMP Preference Specifications (Incubation)
 Bundle-Activator: org.eclipse.imp.prefspecs.PrefspecsPlugin
 Bundle-ActivationPolicy: lazy
 Eclipse-LazyStart: true
-Bundle-Version: 1.4.1
+Bundle-Version: 1.4.2
 Require-Bundle: lpg.runtime,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,

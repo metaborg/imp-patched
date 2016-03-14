@@ -25,7 +25,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide,
  org.eclipse.ltk.ui.refactoring,
  org.eclipse.compare,
- org.tigris.subversion.subclipse.core;bundle-version="1.4.1",
+ org.tigris.subversion.subclipse.core;bundle-version="1.4.2",
  org.tigris.subversion.clientadapter;bundle-version="1.5.0"
 Eclipse-LazyStart: true
 Bundle-Vendor: rfuhrer@watson.ibm.com
